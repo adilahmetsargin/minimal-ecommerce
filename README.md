@@ -1,38 +1,38 @@
 # Minimal E-commerce
 
-A modern, responsive e-commerce front-end application built from scratch with React, TypeScript, and Redux. This project serves as a portfolio piece demonstrating core front-end development skills, state management, and building a feature-rich user experience with pure CSS for styling.
+A modern, responsive e-commerce front-end application built from scratch with React, TypeScript, Redux, Supabase, and Stripe. This project serves as a portfolio piece demonstrating core front-end development skills, state management, backend integration, and a feature-rich user experience with pure CSS for styling.
 
-![Minimal E-commerce Screenshot](https://raw.githubusercontent.com/adilahmetsargin/minimal-ecommerce/main/public/screenshot.png) 
-*Note: A placeholder screenshot. You should add a real screenshot of your application here after deployment.*
+## 🚀 Live Demo
 
-## Live Demo
-
-[[Link to your live deployment on Netlify/GitHub Pages will be here]](https://6857a1b5fc1bc8ad71139b52--splendid-longma-c2286b.netlify.app/)
+[https://sargin-minimal-store.netlify.app/](https://sargin-minimal-store.netlify.app/)
 
 ## Features
 
-- **Modern & Clean UI:** A responsive and intuitive user interface built with pure CSS, ensuring a fast and lightweight experience.
-- **Product Catalog:** Browse all products, with search and category filtering capabilities.
+- **Modern & Clean UI:** Responsive, intuitive, and mobile-friendly design.
+- **Product Catalog:** Browse all products, with search and category filtering.
 - **Product Details Page:** View detailed information for each product.
 - **Shopping Cart:** Add, remove, and update quantities of products in the cart.
 - **Favorites:** Mark products as favorites for easy access later.
-- **User Authentication:** Simulated Login/Register functionality.
-- **Account Page:** A dedicated page for logged-in users to view their profile and order history (mock data).
-- **Checkout Flow:** A simple, multi-step checkout process.
+- **User Authentication:** Supabase-based login/register functionality.
+- **Account Page:** View profile and order history.
+- **Checkout Flow:** Stripe Checkout integration for secure payments.
+- **Order Management:** Orders are saved to Supabase after successful payment.
 - **Toast Notifications:** User-friendly feedback for actions like adding to cart, favorites, etc., using `react-hot-toast`.
 - **Loading Skeletons:** Improved perceived performance with skeleton screens while product data is being fetched.
 - **No Image Fallback:** Displays a placeholder for products without a valid image.
 
 ## Tech Stack
 
-- **Framework:** React 18
-- **Language:** TypeScript
+- **Frontend:** React 18, TypeScript
 - **State Management:** Redux Toolkit
+- **Backend:** Supabase (PostgreSQL, Auth)
+- **Payments:** Stripe Checkout
 - **Routing:** React Router DOM
 - **Styling:** Pure CSS (Flexbox & Grid)
 - **Notifications:** `react-hot-toast`
 - **Loading UI:** `react-loading-skeleton`
 - **Build Tool:** Vite
+- **Deployment:** Netlify
 
 ## Getting Started
 
@@ -63,8 +63,45 @@ To get a local copy up and running, follow these simple steps.
     ```
     The application will be available at `http://localhost:5173`.
 
+### Stripe Test Payments
+- Use the following test card to simulate payments:
+  - Card Number: `4242 4242 4242 4242`
+  - Expiry: Any future date
+  - CVC: Any 3 digits
+
+## Deployment
+
+- The project is automatically deployed to Netlify on every push to the `main` branch.
+- Live site: [https://sargin-minimal-store.netlify.app/](https://sargin-minimal-store.netlify.app/)
+
 ## Contact
 
 Ahmet Sargin - [adilahmetsargin@gmail.com](mailto:adilahmetsargin@gmail.com)
 
 Project Link: [https://github.com/adilahmetsargin/minimal-ecommerce](https://github.com/adilahmetsargin/minimal-ecommerce)
+
+## 🖼️ Screenshots
+
+### Home (Desktop)
+![Home Desktop](public/screenshots/home-desktop..jpeg)
+
+### Home (Mobile)
+![Home Mobile](public/screenshots/home-mobile.jpeg)
+
+### All Products
+![All Products](public/screenshots/products-desktop.png)
+
+### Cart
+![Cart](public/screenshots/cart-desktop.png)
+
+### Favorites
+![Favorites](public/screenshots/favorites-desktop.png)
+
+### Product Detail
+![Product Detail](public/screenshots/product-detail.png)
+
+### Register
+![Register](public/screenshots/register.png)
+
+### Login
+![Login](public/screenshots/login.png)
