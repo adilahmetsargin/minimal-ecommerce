@@ -6,7 +6,7 @@ import { logout } from '../slices/authSlice'
 
 const Navbar: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items)
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch()
   
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
