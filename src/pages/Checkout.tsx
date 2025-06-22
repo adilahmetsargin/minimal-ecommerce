@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
-import toast from 'react-hot-toast';
-import { loadStripe } from '@stripe/stripe-js';
 
 interface ShippingInfo {
   firstName: string;
@@ -16,14 +14,6 @@ interface ShippingInfo {
   country: string;
 }
 
-interface PaymentInfo {
-  cardNumber: string;
-  cardName: string;
-  expiryDate: string;
-  cvv: string;
-}
-
-const stripePromise = loadStripe('pk_test_51RcsJ4Inwttb8HzQvdXqeo9mSssQF5Ai4jxWqD0Jy06lwHtNlEDuG8SdU3IXveAO7hjq367grRHv9N8lB2Rm0uSt00MmRodshu');
 
 const Checkout: React.FC = () => {
   // TODO: Fetch cart items from Supabase
@@ -42,13 +32,6 @@ const Checkout: React.FC = () => {
     country: ''
   });
 
-  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
-    cardNumber: '',
-    cardName: '',
-    expiryDate: '',
-    cvv: ''
-  });
-
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   const shipping = 0; // Free shipping
@@ -58,14 +41,9 @@ const Checkout: React.FC = () => {
     setShippingInfo(prev => ({ ...prev, [field]: value }));
   };
 
-  const handlePaymentChange = (field: keyof PaymentInfo, value: string) => {
-    setPaymentInfo(prev => ({ ...prev, [field]: value }));
-  };
-
   const handleStripeCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cartItems.length === 0) return;
-    const stripe = await stripePromise;
     const response = await fetch('/.netlify/functions/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
