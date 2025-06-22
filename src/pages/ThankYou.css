@@ -1,0 +1,154 @@
+.thank-you-page {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
+  min-height: 100vh;
+}
+
+.thank-you-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0 auto 2rem;
+}
+
+.thank-you-title {
+  font-size: 3rem;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.thank-you-message {
+  font-size: 1.2rem;
+  color: var(--color-text);
+  margin-bottom: 3rem;
+  opacity: 0.8;
+}
+
+.order-info {
+  background: var(--color-background);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow);
+}
+
+.order-info h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  color: var(--color-primary);
+  margin-bottom: 2rem;
+}
+
+.next-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: var(--color-primary);
+  color: var(--color-background);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.step-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.step-content p {
+  color: var(--color-text);
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.continue-shopping,
+.back-home {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.continue-shopping {
+  background: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+}
+
+.continue-shopping:hover {
+  background: #333;
+}
+
+.back-home {
+  background: none;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.back-home:hover {
+  background: var(--color-primary);
+  color: var(--color-background);
+}
+
+@media (max-width: 768px) {
+  .thank-you-title {
+    font-size: 2.5rem;
+  }
+  
+  .thank-you-message {
+    font-size: 1.1rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .continue-shopping,
+  .back-home {
+    width: 100%;
+    max-width: 300px;
+  }
+} 
