@@ -7,7 +7,7 @@ import ProductCardSkeleton from '../components/ProductCardSkeleton'
 import './Home.css'
 
 const Home: React.FC = () => {
-  const featuredProducts = useSelector((state: RootState) => state.products.items.slice(0, 4))
+  const featuredProducts = useSelector((state: RootState) => state.products.items.slice(0, 8))
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
@@ -41,7 +41,7 @@ const Home: React.FC = () => {
           <h2 className="section-title">Featured Products</h2>
           <div className="product-grid">
             {isLoading
-              ? Array.from({ length: 4 }).map((_, index) => <ProductCardSkeleton key={index} />)
+              ? Array.from({ length: 8 }).map((_, index) => <ProductCardSkeleton key={index} />)
               : featuredProducts.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))

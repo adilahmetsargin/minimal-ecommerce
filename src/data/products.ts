@@ -13,7 +13,7 @@ export const products: Product[] = [
     name: 'Classic Cotton Tee',
     price: 24.99,
     category: 'Tops',
-    image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=464&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80',
     description: 'A timeless classic, this 100% cotton tee is a must-have for every wardrobe. Soft, comfortable, and versatile.'
   },
   {
@@ -21,7 +21,7 @@ export const products: Product[] = [
     name: 'Slim-Fit Denim Jeans',
     price: 89.99,
     category: 'Bottoms',
-    image: 'https://images.unsplash.com/photo-1602293589930-45d0de477249?q=80&w=387&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
     description: 'Crafted from premium denim with a hint of stretch, these jeans offer a modern slim fit and all-day comfort.'
   },
   {
@@ -29,23 +29,24 @@ export const products: Product[] = [
     name: 'Wool Blend Overcoat',
     price: 199.99,
     category: 'Outerwear',
-    image: 'https://images.unsplash.com/photo-1505962744833-023a1a399317?q=80&w=387&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80',
     description: 'Stay warm and stylish with our elegant wool blend overcoat, featuring a classic notched lapel and a single-breasted front.'
   },
   {
     id: 4,
-    name: 'Leather Ankle Boots',
-    price: 149.99,
+    name: 'White Sneakers',
+    price: 79.99,
     category: 'Footwear',
-    image: 'https://images.unsplash.com/photo-1603808033192-082d6919d3e1?q=80&w=415&auto=format&fit=crop',
-    description: 'Handcrafted from genuine leather, these ankle boots are the perfect blend of ruggedness and sophistication.'
+    image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=464&auto=format&fit=crop',
+    description: 'Minimalist white sneakers that go with everything. Made with a comfortable cushioned sole.'
   },
+
   {
     id: 5,
     name: 'Linen-Blend Shirt',
     price: 45.00,
     category: 'Tops',
-    image: 'https://images.unsplash.com/photo-1621072156042-3c351b31579a?q=80&w=386&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80',
     description: 'A breezy and lightweight shirt made from a premium linen blend, perfect for warm weather.'
   },
   {
@@ -53,7 +54,7 @@ export const products: Product[] = [
     name: 'Classic Chino Shorts',
     price: 55.50,
     category: 'Bottoms',
-    image: 'https://images.unsplash.com/photo-1591130901921-3f0652bb3915?q=80&w=387&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=400&q=80',
     description: 'Versatile and comfortable, these chino shorts are a summer staple for any casual occasion.'
   },
   {
@@ -61,7 +62,7 @@ export const products: Product[] = [
     name: 'Leather Belt',
     price: 39.99,
     category: 'Accessories',
-    image: 'https://images.unsplash.com/photo-1557890624-543ab6439c38?q=80&w=464&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80',
     description: 'A classic leather belt made from genuine Italian leather. The perfect finishing touch to any outfit.'
   },
   {
@@ -69,25 +70,27 @@ export const products: Product[] = [
     name: 'Canvas Tote Bag',
     price: 29.99,
     category: 'Accessories',
-    image: 'https://images.unsplash.com/photo-1544813545-4827b64fc3b7?q=80&w=464&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80',
     description: 'A durable and spacious canvas tote bag, perfect for daily use. Features an internal pocket for your essentials.'
   },
   {
     id: 9,
-    name: 'Merino Wool Scarf',
-    price: 49.99,
+    name: 'Wayfarer Sunglasses',
+    price: 120.00,
     category: 'Accessories',
-    image: 'https://images.unsplash.com/photo-1519758219522-60c6803885c1?q=80&w=464&auto=format&fit=crop',
-    description: 'Stay warm with this incredibly soft and luxurious merino wool scarf. Available in various colors.'
+    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=580&auto=format&fit=crop',
+    description: 'Iconic Wayfarer sunglasses that offer timeless style and 100% UV protection.'
   },
   {
     id: 10,
-    name: 'Leather Loafers',
-    price: 129.99,
-    category: 'Footwear',
-    image: 'https://images.unsplash.com/photo-1599948127922-267f8a735c02?q=80&w=464&auto=format&fit=crop',
-    description: 'Classic penny loafers handcrafted from full-grain leather. A timeless addition to your shoe collection.'
+    name: 'Denim Jacket',
+    price: 99.99,
+    category: 'Outerwear',
+    image: 'https://images.unsplash.com/photo-1543087903-1ac2ec7aa8c5?q=80&w=464&auto=format&fit=crop',
+    description: 'A classic denim jacket that will never go out of style. Made from sturdy, high-quality denim.'
   },
+
+
   {
     id: 11,
     name: 'Suede Derby Shoes',
@@ -96,14 +99,16 @@ export const products: Product[] = [
     image: 'https://images.unsplash.com/photo-1549481924-d2e389e6c4b2?q=80&w=464&auto=format&fit=crop',
     description: 'Elegant derby shoes in soft suede. Perfect for smart-casual occasions.'
   },
+  
   {
     id: 12,
-    name: 'White Sneakers',
-    price: 79.99,
+    name: 'Leather Ankle Boots',
+    price: 149.99,
     category: 'Footwear',
-    image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=464&auto=format&fit=crop',
-    description: 'Minimalist white sneakers that go with everything. Made with a comfortable cushioned sole.'
+    image: 'https://images.unsplash.com/photo-1517260911205-8a1b5a6ab8c7?auto=format&fit=crop&w=400&q=80',
+    description: 'Handcrafted from genuine leather, these ankle boots are the perfect blend of ruggedness and sophistication.'
   },
+
   {
     id: 13,
     name: 'Bomber Jacket',
@@ -114,11 +119,11 @@ export const products: Product[] = [
   },
   {
     id: 14,
-    name: 'Denim Jacket',
-    price: 99.99,
-    category: 'Outerwear',
-    image: 'https://images.unsplash.com/photo-1543087903-1ac2ec7aa8c5?q=80&w=464&auto=format&fit=crop',
-    description: 'A classic denim jacket that will never go out of style. Made from sturdy, high-quality denim.'
+    name: 'Leather Loafers',
+    price: 129.99,
+    category: 'Footwear',
+    image: 'https://images.unsplash.com/photo-1599948127922-267f8a735c02?q=80&w=464&auto=format&fit=crop',
+    description: 'Classic penny loafers handcrafted from full-grain leather. A timeless addition to your shoe collection.'
   },
   {
     id: 15,
@@ -186,11 +191,11 @@ export const products: Product[] = [
   },
   {
     id: 23,
-    name: 'Wayfarer Sunglasses',
-    price: 120.00,
+    name: 'Merino Wool Scarf',
+    price: 49.99,
     category: 'Accessories',
-    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=580&auto=format&fit=crop',
-    description: 'Iconic Wayfarer sunglasses that offer timeless style and 100% UV protection.'
+    image: 'https://images.unsplash.com/photo-1519758219522-60c6803885c1?q=80&w=464&auto=format&fit=crop',
+    description: 'Stay warm with this incredibly soft and luxurious merino wool scarf. Available in various colors.'
   },
   {
     id: 24,
