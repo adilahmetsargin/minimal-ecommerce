@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
 import toast from 'react-hot-toast';
+import { loadStripe } from '@stripe/stripe-js';
 
 interface ShippingInfo {
   firstName: string;
@@ -21,6 +22,8 @@ interface PaymentInfo {
   expiryDate: string;
   cvv: string;
 }
+
+const stripePromise = loadStripe('pk_test_51RcsJ4Inwttb8HzQvdXqeo9mSssQF5Ai4jxWqD0Jy06lwHtNlEDuG8SdU3IXveAO7hjq367grRHv9N8lB2Rm0uSt00MmRodshu');
 
 const Checkout: React.FC = () => {
   // TODO: Fetch cart items from Supabase
@@ -59,13 +62,21 @@ const Checkout: React.FC = () => {
     setPaymentInfo(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleStripeCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate payment processing
-    console.log('Processing payment...', { shippingInfo, paymentInfo, total });
-    toast.success('Order placed successfully!');
-    // TODO: Clear cart in Supabase and redirect
-    navigate('/thank-you');
+    if (cartItems.length === 0) return;
+    const stripe = await stripePromise;
+    const response = await fetch('/.netlify/functions/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cartItems: cartItems.map(item => ({
+        title: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity
+      })) }),
+    });
+    const { url } = await response.json();
+    window.location.href = url;
   };
 
   if (cartItems.length === 0) {
@@ -89,7 +100,7 @@ const Checkout: React.FC = () => {
     <div className="checkout-page">
       <div className="container">
         <h1 className="page-title">Checkout</h1>
-        <form className="checkout-form" onSubmit={handleSubmit}>
+        <form className="checkout-form" onSubmit={handleStripeCheckout}>
           <div className="checkout-content">
             <div className="checkout-sections">
               {/* Shipping Info */}
@@ -201,54 +212,7 @@ const Checkout: React.FC = () => {
 
               {/* Payment Info */}
               <div className="checkout-section">
-                <h2>Payment Information</h2>
-                <div className="form-group">
-                  <label htmlFor="cardNumber">Card Number *</label>
-                  <input
-                    type="text"
-                    id="cardNumber"
-                    value={paymentInfo.cardNumber}
-                    onChange={(e) => handlePaymentChange('cardNumber', e.target.value)}
-                    placeholder="1234 5678 9012 3456"
-                    required
-                  />
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="cardName">Cardholder Name *</label>
-                  <input
-                    type="text"
-                    id="cardName"
-                    value={paymentInfo.cardName}
-                    onChange={(e) => handlePaymentChange('cardName', e.target.value)}
-                    required
-                  />
-                </div>
-                
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="expiryDate">Expiry Date *</label>
-                    <input
-                      type="text"
-                      id="expiryDate"
-                      value={paymentInfo.expiryDate}
-                      onChange={(e) => handlePaymentChange('expiryDate', e.target.value)}
-                      placeholder="MM/YY"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="cvv">CVV *</label>
-                    <input
-                      type="text"
-                      id="cvv"
-                      value={paymentInfo.cvv}
-                      onChange={(e) => handlePaymentChange('cvv', e.target.value)}
-                      placeholder="123"
-                      required
-                    />
-                  </div>
-                </div>
+                {/* Stripe Checkout ile ödeme alınacak, kart formu kaldırıldı */}
               </div>
             </div>
 
@@ -283,7 +247,7 @@ const Checkout: React.FC = () => {
                 </div>
               </div>
               <button type="submit" className="place-order-btn">
-                Place Order - ${total.toFixed(2)}
+                Pay with Card - ${total.toFixed(2)}
               </button>
             </div>
           </div>
