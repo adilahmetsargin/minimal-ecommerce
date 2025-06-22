@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import type { Product } from '../data/products';
-import { addToCart } from '../slices/cartSlice';
 import { addToFavorites, removeFromFavorites } from '../slices/favoritesSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../redux/store';
+import { supabase } from '../supabaseClient';
 import './ProductCard.css';
 
 interface ProductCardProps {
@@ -19,20 +19,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const favorites = useSelector((state: RootState) => state.favorites.items);
   const isFavorite = favorites.some(item => item.id === product.id);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigation to product detail
-    dispatch(addToCart({
-      id: product.id,
-      product,
-      size: 'M', // Default size
-      color: 'Black', // Default color
-      quantity: 1
-    }));
-    toast.success('Product added to cart!');
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Use a valid test uuid for user_id
+    const userId = '00000000-0000-0000-0000-000000000000';
+    const { error } = await supabase
+      .from('cart')
+      .insert([{ user_id: userId, product_id: product.id, quantity: 1 }]);
+    if (error) {
+      toast.error('Failed to add product to cart!');
+    } else {
+      toast.success('Product added to cart!');
+    }
   };
 
   const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigation to product detail
+    e.preventDefault();
     if (isFavorite) {
       dispatch(removeFromFavorites(product.id));
       toast.success('Removed from favorites!');
@@ -56,8 +58,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             }}
           />
           <button 
-            className={`favorite-btn ${isFavorite ? 'favorited' : ''}`}
+            className={`favorite-btn-icon ${isFavorite ? 'favorited' : ''}`}
             onClick={handleToggleFavorite}
+            aria-label={isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
           >
             {isFavorite ? '❤️' : '🤍'}
           </button>

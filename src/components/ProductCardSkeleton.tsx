@@ -5,7 +5,7 @@ import './ProductCard.css'; // Reuse the same card structure
 
 const ProductCardSkeleton: React.FC = () => {
   return (
-    <div className="product-card">
+    <div className="product-card skeleton" data-testid="product-card-skeleton">
       <Skeleton height={300} style={{ display: 'block' }} />
       <div className="product-info">
         <Skeleton height={24} style={{ marginBottom: '0.5rem' }} />

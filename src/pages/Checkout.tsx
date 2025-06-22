@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import type { RootState } from '../redux/store';
-import { clearCart } from '../slices/cartSlice';
 import './Checkout.css';
 import toast from 'react-hot-toast';
 
@@ -26,8 +23,8 @@ interface PaymentInfo {
 }
 
 const Checkout: React.FC = () => {
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const dispatch = useDispatch();
+  // TODO: Fetch cart items from Supabase
+  const cartItems: any[] = [];
   const navigate = useNavigate();
 
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
@@ -64,15 +61,10 @@ const Checkout: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     // Simulate payment processing
     console.log('Processing payment...', { shippingInfo, paymentInfo, total });
-    
-    // Show success toast
     toast.success('Order placed successfully!');
-    
-    // Clear cart and redirect to thank you page
-    dispatch(clearCart());
+    // TODO: Clear cart in Supabase and redirect
     navigate('/thank-you');
   };
 
@@ -97,11 +89,10 @@ const Checkout: React.FC = () => {
     <div className="checkout-page">
       <div className="container">
         <h1 className="page-title">Checkout</h1>
-        
-        <form onSubmit={handleSubmit} className="checkout-form">
+        <form className="checkout-form" onSubmit={handleSubmit}>
           <div className="checkout-content">
             <div className="checkout-sections">
-              {/* Shipping Information */}
+              {/* Shipping Info */}
               <div className="checkout-section">
                 <h2>Shipping Information</h2>
                 <div className="form-row">
@@ -208,7 +199,7 @@ const Checkout: React.FC = () => {
                 </div>
               </div>
 
-              {/* Payment Information */}
+              {/* Payment Info */}
               <div className="checkout-section">
                 <h2>Payment Information</h2>
                 <div className="form-group">
@@ -266,10 +257,9 @@ const Checkout: React.FC = () => {
               <h2>Order Summary</h2>
               <div className="order-items">
                 {cartItems.map((item) => (
-                  <div key={`${item.id}-${item.size}-${item.color}`} className="order-item">
+                  <div key={item.id} className="order-item">
                     <div className="item-info">
                       <h4>{item.product.name}</h4>
-                      <p>Size: {item.size} | Color: {item.color}</p>
                       <p>Qty: {item.quantity}</p>
                     </div>
                     <div className="item-price">
@@ -278,7 +268,6 @@ const Checkout: React.FC = () => {
                   </div>
                 ))}
               </div>
-              
               <div className="order-totals">
                 <div className="total-row">
                   <span>Subtotal ({totalItems} items):</span>
@@ -293,7 +282,6 @@ const Checkout: React.FC = () => {
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
-              
               <button type="submit" className="place-order-btn">
                 Place Order - ${total.toFixed(2)}
               </button>

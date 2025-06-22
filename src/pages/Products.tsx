@@ -1,26 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../redux/store';
 import ProductCard from '../components/ProductCard';
 import ProductCardSkeleton from '../components/ProductCardSkeleton';
+import { supabase } from '../supabaseClient';
 import './Products.css';
 
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  image: string;
+  description: string;
+}
+
 const Products: React.FC = () => {
-  const allProducts = useSelector((state: RootState) => state.products.items);
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
+      setError(null);
+      const { data, error } = await supabase
+        .from('products')
+        .select('*');
+      if (error) {
+        setError('Failed to fetch products.');
+        setProducts([]);
+      } else {
+        setProducts(data as Product[]);
+      }
       setIsLoading(false);
-    }, 1000); // Simulate 1 second loading time
-    return () => clearTimeout(timer);
+    };
+    fetchProducts();
   }, []);
 
-  const categories = ['all', ...new Set(allProducts.map(product => product.category))];
-  
-  const filteredProducts = allProducts.filter(product => {
+  const categories = ['all', ...Array.from(new Set(products.map(product => product.category)))];
+
+  const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -31,7 +51,6 @@ const Products: React.FC = () => {
     <div className="products-page">
       <div className="container">
         <h1 className="page-title">All Products</h1>
-        
         <div className="filters">
           <div className="search-filter">
             <input
@@ -42,7 +61,6 @@ const Products: React.FC = () => {
               className="search-input"
             />
           </div>
-          
           <div className="category-filter">
             <label htmlFor="category">Filter by Category:</label>
             <select 
@@ -58,11 +76,9 @@ const Products: React.FC = () => {
             </select>
           </div>
         </div>
-
         <div className="results-info">
-          <p>Showing {filteredProducts.length} of {allProducts.length} products</p>
+          <p>Showing {filteredProducts.length} of {products.length} products</p>
         </div>
-
         <div className="product-grid">
           {isLoading 
             ? Array.from({ length: 8 }).map((_, index) => <ProductCardSkeleton key={index} />)
@@ -71,13 +87,13 @@ const Products: React.FC = () => {
               ))
           }
         </div>
-        
         {!isLoading && filteredProducts.length === 0 && (
           <div className="no-results">
             <h3>No products found</h3>
             <p>Try adjusting your search or filter criteria.</p>
           </div>
         )}
+        {error && <div className="error-message">{error}</div>}
       </div>
     </div>
   );
