@@ -1,54 +1,70 @@
-# React + TypeScript + Vite
+# Minimal E-commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive e-commerce front-end application built from scratch with React, TypeScript, and Redux. This project serves as a portfolio piece demonstrating core front-end development skills, state management, and building a feature-rich user experience with pure CSS for styling.
 
-Currently, two official plugins are available:
+![Minimal E-commerce Screenshot](https://raw.githubusercontent.com/adilahmetsargin/minimal-ecommerce/main/public/screenshot.png) 
+*Note: A placeholder screenshot. You should add a real screenshot of your application here after deployment.*
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Demo
 
-## Expanding the ESLint configuration
+[Link to your live deployment on Netlify/GitHub Pages will be here]
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Modern & Clean UI:** A responsive and intuitive user interface built with pure CSS, ensuring a fast and lightweight experience.
+- **Product Catalog:** Browse all products, with search and category filtering capabilities.
+- **Product Details Page:** View detailed information for each product.
+- **Shopping Cart:** Add, remove, and update quantities of products in the cart.
+- **Favorites:** Mark products as favorites for easy access later.
+- **User Authentication:** Simulated Login/Register functionality.
+- **Account Page:** A dedicated page for logged-in users to view their profile and order history (mock data).
+- **Checkout Flow:** A simple, multi-step checkout process.
+- **Toast Notifications:** User-friendly feedback for actions like adding to cart, favorites, etc., using `react-hot-toast`.
+- **Loading Skeletons:** Improved perceived performance with skeleton screens while product data is being fetched.
+- **No Image Fallback:** Displays a placeholder for products without a valid image.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Framework:** React 18
+- **Language:** TypeScript
+- **State Management:** Redux Toolkit
+- **Routing:** React Router DOM
+- **Styling:** Pure CSS (Flexbox & Grid)
+- **Notifications:** `react-hot-toast`
+- **Loading UI:** `react-loading-skeleton`
+- **Build Tool:** Vite
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Getting Started
+
+To get a local copy up and running, follow these simple steps.
+
+### Prerequisites
+
+- Node.js (v18.x or later)
+- npm (or yarn/pnpm)
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/adilahmetsargin/minimal-ecommerce.git
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd minimal-ecommerce
+    ```
+3.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+    The application will be available at `http://localhost:5173`.
+
+## Contact
+
+Ahmet Sargin - [adilahmetsargin@gmail.com](mailto:adilahmetsargin@gmail.com)
+
+Project Link: [https://github.com/adilahmetsargin/minimal-ecommerce](https://github.com/adilahmetsargin/minimal-ecommerce)
