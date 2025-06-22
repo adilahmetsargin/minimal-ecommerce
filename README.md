@@ -7,7 +7,7 @@ A modern, responsive e-commerce front-end application built from scratch with Re
 
 ## Live Demo
 
-[Link to your live deployment on Netlify/GitHub Pages will be here]
+[[Link to your live deployment on Netlify/GitHub Pages will be here]](https://6857a1b5fc1bc8ad71139b52--splendid-longma-c2286b.netlify.app/)
 
 ## Features
 
