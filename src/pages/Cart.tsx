@@ -1,90 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState, AppDispatch } from '../redux/store';
+import { fetchCart, updateCartItem, removeCartItem, localUpdateQuantity, localRemoveItem } from '../slices/cartSlice';
 import { supabase } from '../supabaseClient';
 import './Cart.css';
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  image: string;
-  description: string;
-}
-
-interface CartItem {
-  id: number;
-  user_id: string;
-  product_id: number;
-  quantity: number;
-  product: Product;
-}
 
 const PLACEHOLDER_IMAGE_URL = 'https://placehold.co/600x400/f0f0f0/333?text=No+Image';
 
 const Cart: React.FC = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { items: cartItems, loading: isLoading, error } = useSelector((state: RootState) => state.cart);
 
-  // Get user_id from Supabase Auth (or use a placeholder for testing)
-  // Replace this with your actual auth logic
-  const user = supabase.auth.getUser ? supabase.auth.getUser() : null;
-  // @ts-ignore
-  const userId = user?.id || '00000000-0000-0000-0000-000000000000';
-
-  // Fetch cart items from Supabase
+  // Fetch user id from Supabase Auth
   useEffect(() => {
-    const fetchCart = async () => {
-      setIsLoading(true);
-      setError(null);
-      const { data, error } = await supabase
-        .from('cart')
-        .select('*, product:product_id(*)')
-        .eq('user_id', userId);
-      if (error) {
-        setError('Failed to fetch cart items.');
-        setCartItems([]);
-      } else {
-        setCartItems(data as CartItem[]);
-      }
-      setIsLoading(false);
+    const fetchUserId = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUserId(user?.id || null);
     };
-    fetchCart();
-  }, [userId]);
+    fetchUserId();
+  }, []);
 
-  // Update quantity in Supabase
-  const handleQuantityChange = async (cartItemId: number, newQuantity: number) => {
+  // Fetch cart from Supabase when userId is available
+  useEffect(() => {
+    if (!userId) return;
+    dispatch(fetchCart(userId));
+  }, [userId, dispatch]);
+
+  // Handle quantity change for cart items
+  const handleQuantityChange = (cartItemId: number, newQuantity: number) => {
+    if (!userId) return;
     if (newQuantity <= 0) {
-      await handleRemoveItem(cartItemId);
+      dispatch(localRemoveItem(cartItemId));
+      dispatch(removeCartItem({ userId, cartItemId }));
       return;
     }
-    // Optimistic update
-    setCartItems(prev => prev.map(item => item.id === cartItemId ? { ...item, quantity: newQuantity } : item));
-    const { error } = await supabase
-      .from('cart')
-      .update({ quantity: newQuantity })
-      .eq('id', cartItemId);
-    if (error) {
-      setError('Failed to update quantity.');
-      // Optionally revert state here
-    }
-    // isLoading kullanılmıyor!
+    dispatch(localUpdateQuantity({ cartItemId, quantity: newQuantity }));
+    dispatch(updateCartItem({ userId, cartItemId, quantity: newQuantity }));
   };
 
-  // Remove item from Supabase
-  const handleRemoveItem = async (cartItemId: number) => {
-    // Optimistic update: remove item from state immediately
-    setCartItems(prev => prev.filter(item => item.id !== cartItemId));
-    const { error } = await supabase
-      .from('cart')
-      .delete()
-      .eq('id', cartItemId);
-    if (error) {
-      setError('Failed to remove item.');
-      // Optionally, revert state here if needed
-    }
+  const handleRemoveItem = (cartItemId: number) => {
+    if (!userId) return;
+    dispatch(localRemoveItem(cartItemId));
+    dispatch(removeCartItem({ userId, cartItemId }));
   };
 
   const handleCheckout = () => {
@@ -94,7 +54,7 @@ const Cart: React.FC = () => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
-  if (isLoading) {
+  if (isLoading || userId === null) {
     return (
       <div className="cart-page">
         <div className="container">
@@ -198,10 +158,9 @@ const Cart: React.FC = () => {
             </button>
           </div>
         </div>
-        <button type="button" onClick={() => alert('clicked!')}>Test Button</button>
       </div>
     </div>
   );
 };
 
-export default Cart; 
+export default Cart;

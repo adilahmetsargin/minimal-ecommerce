@@ -85,8 +85,6 @@ Project Link: [https://github.com/adilahmetsargin/minimal-ecommerce](https://git
 ### Home (Desktop)
 ![Home Desktop](public/screenshots/home-desktop.jpeg)
 
-### Home (Mobile)
-![Home Mobile](public/screenshots/home-mobile.jpeg)
 
 ### All Products
 ![All Products](public/screenshots/products-desktop.png)

@@ -5,6 +5,7 @@ import type { RootState } from '../redux/store';
 import { loginStart, loginSuccess, loginFailure } from '../slices/authSlice';
 import './Auth.css';
 import toast from 'react-hot-toast';
+import { supabase } from '../supabaseClient';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
@@ -37,19 +38,25 @@ const Login: React.FC = () => {
     dispatch(loginStart());
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockUser = {
-        id: '1',
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
-        firstName: 'John',
-        lastName: 'Doe',
-      };
-
-      dispatch(loginSuccess(mockUser));
-      toast.success(`Welcome back, ${mockUser.firstName}!`);
+        password: formData.password,
+      });
+      if (error) {
+        dispatch(loginFailure());
+        toast.error(error.message || 'Invalid email or password');
+        setError(error.message || 'Invalid email or password');
+        return;
+      }
+      dispatch(loginSuccess({
+        id: data.user?.id || '',
+        email: data.user?.email || '',
+        firstName: data.user?.user_metadata?.firstName || '',
+        lastName: data.user?.user_metadata?.lastName || '',
+      }));
+      toast.success(`Welcome back, ${data.user?.user_metadata?.firstName || ''}!`);
       navigate('/');
-    } catch (err) {
+    } catch (err: any) {
       dispatch(loginFailure());
       toast.error('Invalid email or password');
       setError('Invalid email or password');

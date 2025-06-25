@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
-
-interface ShippingInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-}
-
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState, AppDispatch } from '../redux/store';
+import { updateCartItem, removeCartItem, fetchCart } from '../slices/cartSlice';
+import { supabase } from '../supabaseClient';
 
 const Checkout: React.FC = () => {
-  // TODO: Fetch cart items from Supabase
-  const cartItems: any[] = [];
-  const navigate = useNavigate();
+  interface ShippingInfo {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  }
 
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { items: cartItems, loading } = useSelector((state: RootState) => state.cart);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     firstName: '',
     lastName: '',
@@ -32,6 +34,17 @@ const Checkout: React.FC = () => {
     country: ''
   });
 
+  // Kullanıcı id'sini Supabase'den alıp sepeti çek
+  useEffect(() => {
+    const fetchUserAndCart = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        dispatch(fetchCart(user.id));
+      }
+    };
+    fetchUserAndCart();
+  }, [dispatch]);
+
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   const shipping = 0; // Free shipping
@@ -41,21 +54,47 @@ const Checkout: React.FC = () => {
     setShippingInfo(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleUpdateQuantity = (cartItemId: number, newQuantity: number) => {
+    if (newQuantity < 1) return;
+    const userId = cartItems.find(i => i.id === cartItemId)?.user_id;
+    if (!userId) return;
+    dispatch(updateCartItem({ userId, cartItemId, quantity: newQuantity }));
+  };
+
+  const handleRemoveItem = (cartItemId: number) => {
+    const userId = cartItems.find(i => i.id === cartItemId)?.user_id;
+    if (!userId) return;
+    dispatch(removeCartItem({ userId, cartItemId }));
+  };
+
   const handleStripeCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cartItems.length === 0) return;
     const response = await fetch('/.netlify/functions/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cartItems: cartItems.map(item => ({
-        title: item.product.name,
-        price: item.product.price,
-        quantity: item.quantity
-      })) }),
+      body: JSON.stringify({
+        cartItems: cartItems.map(item => ({
+          title: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity
+        }))
+      }),
     });
     const { url } = await response.json();
     window.location.href = url;
   };
+
+  if (loading) {
+    return (
+      <div className="checkout-page">
+        <div className="container">
+          <h1 className="page-title">Checkout</h1>
+          <div className="loading-message">Loading your cart...</div>
+        </div>
+      </div>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -106,7 +145,6 @@ const Checkout: React.FC = () => {
                     />
                   </div>
                 </div>
-                
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="email">Email *</label>
@@ -129,7 +167,6 @@ const Checkout: React.FC = () => {
                     />
                   </div>
                 </div>
-                
                 <div className="form-group">
                   <label htmlFor="address">Address *</label>
                   <input
@@ -140,7 +177,6 @@ const Checkout: React.FC = () => {
                     required
                   />
                 </div>
-                
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="city">City *</label>
@@ -163,37 +199,54 @@ const Checkout: React.FC = () => {
                     />
                   </div>
                 </div>
-                
                 <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="zipCode">ZIP Code *</label>
-                    <input
-                      type="text"
-                      id="zipCode"
-                      value={shippingInfo.zipCode}
-                      onChange={(e) => handleShippingChange('zipCode', e.target.value)}
-                      required
-                    />
-                  </div>
                   <div className="form-group">
                     <label htmlFor="country">Country *</label>
                     <input
                       type="text"
                       id="country"
                       value={shippingInfo.country}
-                      onChange={(e) => handleShippingChange('country', e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleShippingChange('country', e.target.value)}
                       required
                     />
                   </div>
                 </div>
               </div>
-
-              {/* Payment Info */}
+              {/* Cart Items Controls */}
+              <div className="order-items">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="order-item">
+                    <div className="item-info">
+                      <h4>{item.product.name}</h4>
+                      <div className="quantity-controls">
+                        <button
+                          type="button"
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                          disabled={item.quantity <= 1}
+                        >-</button>
+                        <span>{item.quantity}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                        >+</button>
+                        <button
+                          type="button"
+                          className="remove-item-btn"
+                          onClick={() => handleRemoveItem(item.id)}
+                        >Remove</button>
+                      </div>
+                    </div>
+                    <div className="item-price">
+                      ${(item.product.price * item.quantity).toFixed(2)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Payment Info (Stripe Checkout) */}
               <div className="checkout-section">
-                {/* Stripe Checkout ile ödeme alınacak, kart formu kaldırıldı */}
+                {/* Payment handled by Stripe Checkout */}
               </div>
             </div>
-
             {/* Order Summary */}
             <div className="order-summary">
               <h2>Order Summary</h2>
@@ -235,4 +288,4 @@ const Checkout: React.FC = () => {
   );
 };
 
-export default Checkout; 
+export default Checkout;

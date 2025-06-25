@@ -21,8 +21,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
-    // Use a valid test uuid for user_id
-    const userId = '00000000-0000-0000-0000-000000000000';
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error('You must be logged in to add to cart!');
+      return;
+    }
+    const userId = user.id;
     const { error } = await supabase
       .from('cart')
       .insert([{ user_id: userId, product_id: product.id, quantity: 1 }]);

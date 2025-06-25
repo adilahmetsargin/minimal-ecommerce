@@ -5,6 +5,7 @@ import type { RootState } from '../redux/store';
 import { registerStart, registerSuccess, registerFailure } from '../slices/authSlice';
 import './Auth.css';
 import toast from 'react-hot-toast';
+import { supabase } from '../supabaseClient';
 
 const Register: React.FC = () => {
   const dispatch = useDispatch();
@@ -52,19 +53,31 @@ const Register: React.FC = () => {
     dispatch(registerStart());
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockUser = {
-        id: '1',
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+          }
+        }
+      });
+      if (error) {
+        dispatch(registerFailure());
+        toast.error(error.message || 'Registration failed. Please try again.');
+        setError(error.message || 'Registration failed. Please try again.');
+        return;
+      }
+      dispatch(registerSuccess({
+        id: data.user?.id || '',
         email: formData.email,
         firstName: formData.firstName,
         lastName: formData.lastName,
-      };
-
-      dispatch(registerSuccess(mockUser));
-      toast.success('Account created successfully!');
-      navigate('/');
-    } catch (err) {
+      }));
+      toast.success('Account created successfully! Please check your email to verify your account.');
+      navigate('/login');
+    } catch (err: any) {
       dispatch(registerFailure());
       toast.error('Registration failed. Please try again.');
       setError('Registration failed. Please try again.');

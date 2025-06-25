@@ -5,8 +5,10 @@ import type { RootState } from '../redux/store'
 import { logout } from '../slices/authSlice'
 
 const Navbar: React.FC = () => {
-  // Cart count is now a placeholder, can be fetched from Supabase if needed
-  const cartItemCount = 0;
+  // Cart count from Redux
+  const cartItemCount = useSelector((state: RootState) =>
+    state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
+  );
   const { isAuthenticated } = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch()
   
